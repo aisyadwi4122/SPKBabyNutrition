@@ -49,13 +49,6 @@ if os.path.exists(csv_file_path):
 
         df['Cluster'] = clusters
 
-        st.subheader("Hasil Clustering")
-        st.dataframe(df[['Menu', 'Cluster'] + nutri_columns].head(20))
-
-        # Statistik cluster
-        st.subheader("Rata-rata Nutrisi per Cluster")
-        st.dataframe(df.groupby('Cluster')[nutri_columns].mean().round(2))
-        
         st.subheader("Rekomendasi Makanan Terbaik untuk Bayi")
 
         # Ambil centroid cluster
@@ -99,6 +92,15 @@ if os.path.exists(csv_file_path):
                         .head(5)[["Menu", "Cluster", "DistanceToCentroid"] + nutri_columns]
         )
 
+        st.subheader("Hasil Clustering")
+        st.dataframe(df[['Menu', 'Cluster'] + nutri_columns].head(20))
+
+        # Statistik cluster
+        st.subheader("Rata-rata Nutrisi per Cluster")
+        st.dataframe(df.groupby('Cluster')[nutri_columns].mean().round(2))
+        
+        
+
     # Visualisasi cluster (2 fitur pertama)
         st.subheader("Visualisasi Cluster")
         fig, ax = plt.subplots(figsize=(8,6))
@@ -120,6 +122,7 @@ if os.path.exists(csv_file_path):
         st.warning("Pilih minimal 2 kolom nutrisi untuk clustering.")
 else:
     st.error(f"File '{csv_file_path}' tidak ditemukan. Silakan letakkan file CSV di folder project.")
+
 
 
 
