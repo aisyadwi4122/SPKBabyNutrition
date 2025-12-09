@@ -40,23 +40,6 @@ if os.path.exists(csv_file_path):
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(df[nutri_columns])
 
-        # Ambil makanan terdekat (rekomendasi utama)
-        recommended_food = best_foods.sort_values("DistanceToCentroid").iloc[0]
-
-        st.success(f"### ⭐ Rekomendasi Utama: **{recommended_food['Menu']}**")
-        st.write("Makanan ini paling mendekati komposisi nutrisi ideal dalam cluster terbaik.")
-
-        # Detail nutrisi rekomendasi
-        st.subheader("Detail Nutrisi Rekomendasi")
-        st.dataframe(recommended_food[nutri_columns + ["Cluster", "DistanceToCentroid"]].to_frame().T)
-
-        # Alternatif makanan lain
-        st.subheader("Alternatif Makanan Lain dalam Cluster Terbaik")
-        st.dataframe(
-            best_foods.sort_values("DistanceToCentroid")
-                        .head(5)[["Menu", "Cluster", "DistanceToCentroid"] + nutri_columns]
-        )
-
         # Pilih jumlah cluster
         n_clusters = st.slider("Pilih jumlah cluster (K)", min_value=2, max_value=10, value=3)
 
@@ -99,6 +82,23 @@ if os.path.exists(csv_file_path):
 
         best_foods["DistanceToCentroid"] = distances
 
+        # Ambil makanan terdekat (rekomendasi utama)
+        recommended_food = best_foods.sort_values("DistanceToCentroid").iloc[0]
+
+        st.success(f"### ⭐ Rekomendasi Utama: **{recommended_food['Menu']}**")
+        st.write("Makanan ini paling mendekati komposisi nutrisi ideal dalam cluster terbaik.")
+
+        # Detail nutrisi rekomendasi
+        st.subheader("Detail Nutrisi Rekomendasi")
+        st.dataframe(recommended_food[nutri_columns + ["Cluster", "DistanceToCentroid"]].to_frame().T)
+
+        # Alternatif makanan lain
+        st.subheader("Alternatif Makanan Lain dalam Cluster Terbaik")
+        st.dataframe(
+            best_foods.sort_values("DistanceToCentroid")
+                        .head(5)[["Menu", "Cluster", "DistanceToCentroid"] + nutri_columns]
+        )
+
     # Visualisasi cluster (2 fitur pertama)
         st.subheader("Visualisasi Cluster")
         fig, ax = plt.subplots(figsize=(8,6))
@@ -120,5 +120,6 @@ if os.path.exists(csv_file_path):
         st.warning("Pilih minimal 2 kolom nutrisi untuk clustering.")
 else:
     st.error(f"File '{csv_file_path}' tidak ditemukan. Silakan letakkan file CSV di folder project.")
+
 
 
