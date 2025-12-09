@@ -52,22 +52,6 @@ if os.path.exists(csv_file_path):
         st.subheader("Hasil Clustering")
         st.dataframe(df[['Menu', 'Cluster'] + nutri_columns].head(20))
 
-        # Visualisasi cluster (2 fitur pertama)
-        st.subheader("Visualisasi Cluster")
-        fig, ax = plt.subplots(figsize=(8,6))
-        sns.scatterplot(
-            x=df[nutri_columns[0]], 
-            y=df[nutri_columns[1]], 
-            hue=df['Cluster'], 
-            palette='Set2', 
-            s=100,
-            ax=ax
-        )
-        ax.set_title("Cluster Makanan Bayi")
-        ax.set_xlabel(nutri_columns[0])
-        ax.set_ylabel(nutri_columns[1])
-        st.pyplot(fig)
-
         # Statistik cluster
         st.subheader("Rata-rata Nutrisi per Cluster")
         st.dataframe(df.groupby('Cluster')[nutri_columns].mean().round(2))
@@ -115,8 +99,25 @@ if os.path.exists(csv_file_path):
                         .head(5)[["Menu", "Cluster", "DistanceToCentroid"] + nutri_columns]
         )
 
+    # Visualisasi cluster (2 fitur pertama)
+        st.subheader("Visualisasi Cluster")
+        fig, ax = plt.subplots(figsize=(8,6))
+        sns.scatterplot(
+            x=df[nutri_columns[0]], 
+            y=df[nutri_columns[1]], 
+            hue=df['Cluster'], 
+            palette='Set2', 
+            s=100,
+            ax=ax
+        )
+        ax.set_title("Cluster Makanan Bayi")
+        ax.set_xlabel(nutri_columns[0])
+        ax.set_ylabel(nutri_columns[1])
+        st.pyplot(fig)
+
 
     else:
         st.warning("Pilih minimal 2 kolom nutrisi untuk clustering.")
 else:
     st.error(f"File '{csv_file_path}' tidak ditemukan. Silakan letakkan file CSV di folder project.")
+
